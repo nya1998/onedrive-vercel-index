@@ -49,7 +49,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const x = decryptPayload(payload as string)
   const refer = req.headers['referer']
-  const shortLink = ['khaddavi.net']
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
@@ -79,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!refer?.includes(shortLink)) {
+  if (!refer?.includes('khaddavi.net')) {
     res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
     return
   } else if(x == ""){
