@@ -78,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!refer?.includes('khaddavi.net') || !refer?.includes('semawur.com')) {
+  if (!refer?.includes('khaddavi.net') && !refer?.includes('semawur.com')) {
     res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
     return
   } else if(x == ""){
