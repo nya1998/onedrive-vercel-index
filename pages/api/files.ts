@@ -78,7 +78,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!refer?.includes('carapedi.id') && !refer?.includes('go.bicolink.net')) {
+  if (refer?.includes('carapedi.id') && !refer?.includes('go.menjelajahi.com')) {
     res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
     return
   } else if(x == ""){
