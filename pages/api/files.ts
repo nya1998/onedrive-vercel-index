@@ -22,12 +22,6 @@ export function decryptPayload(obfuscated: string): string {
   }
 }
 
-function extractDomain(url: string): string | null {
-  const regex = /https?:\/\/([^/?#]+)(?:[/?#]|$)/i
-  const match = url.match(regex)
-  return match ? match[1] : null
-}
-
 // CORS middleware for raw links: https://nextjs.org/docs/api-routes/api-middlewares
 export function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
   const cors = Cors({ methods: ['GET', 'HEAD'] })
@@ -55,14 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const x = decryptPayload(payload as string)
   const refer: string = req.headers['referer'] ?? ''
-  const allowedRefer: string[] = ['khaddavi.net', 'semawur.com', 'carapedi.id', 'go.menjelajahi.com']
-
-  let referDomain: string = ''
-  if (typeof refer === 'string') {
-    referDomain = extractDomain(refer);
-  }else {
-    referDomain = ''
-  }
+  const allowedRefer: string[] = ['https://khaddavi.net/', 'https://semawur.com/', 'https://carapedi.id/', 'go.menjelajahi.com/']
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
@@ -92,7 +79,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!allowedRefer.includes(referDomain) || refer=="") {
+  if (!allowedRefer.includes(refer) || refer=="") {
     res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
     return
   }else if(x == ""){
