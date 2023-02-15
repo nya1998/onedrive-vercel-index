@@ -58,8 +58,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const allowedRefer: string[] = ['khaddavi.net', 'semawur.com', 'carapedi.id', 'go.menjelajahi.com']
 
   let referDomain: string;
-  if (refer) {
+  if (typeof refer === 'string') {
     referDomain = extractDomain(refer);
+  }else {
+    referDomain = ''
   }
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
