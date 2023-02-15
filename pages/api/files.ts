@@ -48,7 +48,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const odpt = 'c202498aea9cd692709d37368b7b617ea30c147e5f6b2bc32d5a742aac85d717'
 
   const x = decryptPayload(payload as string)
-  const refer = req.headers['referer']
+  const refer: string = extractDomain(req.headers['referer']) || ''
+  const allowedRefer: string[] = ['khaddavi.net', 'semawur.com', 'carapedi.id', 'go.menjelajahi.com']
+
+  let referDomain: string;
+  if (refer) {
+    referDomain = extractDomain(refer);
+  }
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
@@ -78,10 +84,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (refer?.includes('carapedi.id') && !refer?.includes('go.menjelajahi.com')) {
+  if (!allowedRefer.includes(referDomain) || refer=="") {
     res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
     return
-  } else if(x == ""){
+  }else if(x == ""){
     res.status(400).json({ error: 'Invalid Payload' })
     return
   } else {
