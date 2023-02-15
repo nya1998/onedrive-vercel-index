@@ -54,7 +54,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const odpt = 'c202498aea9cd692709d37368b7b617ea30c147e5f6b2bc32d5a742aac85d717'
 
   const x = decryptPayload(payload as string)
-  const refer: string = extractDomain(req.headers['referer']) || ''
+  const refer: string = req.headers['referer'] ?? ''
   const allowedRefer: string[] = ['khaddavi.net', 'semawur.com', 'carapedi.id', 'go.menjelajahi.com']
 
   let referDomain: string;
