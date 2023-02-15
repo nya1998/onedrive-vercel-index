@@ -22,6 +22,12 @@ export function decryptPayload(obfuscated: string): string {
   }
 }
 
+function extractDomain(url: string): string | null {
+  const regex = /https?:\/\/([^/?#]+)(?:[/?#]|$)/i
+  const match = url.match(regex)
+  return match ? match[1] : null
+}
+
 // CORS middleware for raw links: https://nextjs.org/docs/api-routes/api-middlewares
 export function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
   const cors = Cors({ methods: ['GET', 'HEAD'] })
