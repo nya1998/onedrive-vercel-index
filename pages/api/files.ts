@@ -57,7 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const refer: string = req.headers['referer'] ?? ''
   const allowedRefer: string[] = ['khaddavi.net', 'semawur.com', 'carapedi.id', 'go.menjelajahi.com']
 
-  let referDomain: string;
+  let referDomain: string = ''
   if (typeof refer === 'string') {
     referDomain = extractDomain(refer);
   }else {
