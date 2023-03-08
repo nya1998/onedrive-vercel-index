@@ -49,7 +49,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const x = decryptPayload(payload as string)
   const refer: string = req.headers['referer'] ?? ''
-  const allowedRefer: string[] = ['https://khaddavi.net/', 'https://semawur.com/', 'https://carapedi.id/', 'https://go.menjelajahi.com/', 'https://ouo.io/', 'https://karyawan.co.id/', 'https://ouo.press/', 'https://go.nyawang.com/']
+  const allowedRefer: string[] = ['https://khaddavi.net/', 'https://semawur.com/', 'https://carapedi.id/', 'https://go.pernahsukses.com/', 'https://ouo.io/', 'https://karyawan.co.id/', 'https://ouo.press/', 'https://go.nyawang.com/']
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
