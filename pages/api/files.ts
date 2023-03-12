@@ -49,7 +49,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   const x = decryptPayload(payload as string)
   const refer: string = req.headers['referer'] ?? ''
-  const allowedRefer: string[] = ['https://khaddavi.net/', 'https://semawur.com/', 'https://carapedi.id/', 'https://go.pernahsukses.com/', 'https://ouo.io/', 'https://karyawan.co.id/', 'https://ouo.press/', 'https://go.nyawang.com/']
+  const allowedRefer: RegExp[] = [
+    /^https:\/\/khaddavi\.net\//,
+    /^https:\/\/semawur\.com\//,
+    /^https:\/\/carapedi\.id\//,
+    /^https:\/\/ouo\..*\//,
+    /^https:\/\/karyawan\.co\.id\//,
+    /^https:\/\/go\..*\//,
+  ];
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
@@ -79,7 +86,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!allowedRefer.includes(refer) || refer=="") {
+  if (!allowedRefer.some(regex => regex.test(refer)) || refer === "") {
     res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
     return
   }else if(x == ""){
