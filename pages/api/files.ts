@@ -52,6 +52,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const allowedRefer: RegExp[] = [
     /^https:\/\/khaddavi\.net\//,
     /^https:\/\/semawur\.com\//,
+    /^https:\/\/contentmenarik\.com\//,
     /^https:\/\/carapedi\.id\//,
     /^https:\/\/ouo\..*\//,
     /^https:\/\/karyawan\.co\.id\//,
