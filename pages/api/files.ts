@@ -51,7 +51,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const refer: string = req.headers['referer'] ?? ''
   const allowedRefer: RegExp[] = [
     /^https:\/\/khaddavi\.net\//,
-    /^https:\/\/jrtekno\.com\//,
+    /^https:\/\/www.jrtekno\.com\//,
     /^https:\/\/semawur\.com\//,
     /^https:\/\/contentmenarik\.com\//,
     /^https:\/\/carapedi\.id\//,
