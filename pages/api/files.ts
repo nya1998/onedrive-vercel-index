@@ -59,7 +59,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /^https:\/\/carapedi\.id\//,
     /^https:\/\/ouo\..*\//,
     /^https:\/\/karyawan\.co\.id\//,
-    /^https:\/\/go\..*\//,
   ];
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
