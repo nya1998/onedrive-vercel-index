@@ -50,6 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const x = decryptPayload(payload as string)
   const refer: string = req.headers['referer'] ?? ''
   const allowedRefer: RegExp[] = [
+    /^https:\/\/beruanglaut\.com\//,
     /^https:\/\/khaddavi\.net\//,
     /^https:\/\/www.jrtekno\.com\//,
     /^https:\/\/semawur\.com\//,
