@@ -56,6 +56,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     /^https:\/\/www.jrtekno\.com\//,
     /^https:\/\/semawur\.com\//,
     /^https:\/\/realsht\.mobi\//,
+    /^https:\/\/go.bicolink\.net\//,
     /^https:\/\/contentmenarik\.com\//,
     /^https:\/\/carapedi\.id\//,
     /^https:\/\/ouo\..*\//,
