@@ -9,18 +9,24 @@ import { driveApi, cacheControlHeader } from '../../config/api.config'
 import { encodePath, getAccessToken, checkAuthRoute } from '.'
 import e from 'cors'
 
-const AES_SECRET_KEY = 'KwOurxh6Lo'
+const AES_SECRET_KEY = 'KwOurxh6Lo';
 export function decryptPayload(obfuscated: string): string {
+  const base64 = CryptoJS.enc.Base64.parse(obfuscated).toString(CryptoJS.enc.Utf8);
+  
   try {
-    // Decrypt AES + Base64 obfuscated token
-    const base64 = CryptoJS.enc.Base64.parse(obfuscated)
-    const parseb64 = base64.toString(CryptoJS.enc.Utf8)
-    const decrypted = CryptoJS.AES.decrypt(parseb64, AES_SECRET_KEY)
-    return decrypted.toString(CryptoJS.enc.Utf8)
+    const decrypted = CryptoJS.AES.decrypt(base64, AES_SECRET_KEY).toString(CryptoJS.enc.Utf8);
+    return decrypted;
   } catch (error) {
-    return ''
+    throw new Error('Failed to decrypt the payload');
   }
 }
+
+function extractDomain(url: string): string | null {
+  const regex = /https?:\/\/([^/?#]+)(?:[/?#]|$)/i
+  const match = url.match(regex)
+  return match ? match[1] : null
+}
+
 
 // CORS middleware for raw links: https://nextjs.org/docs/api-routes/api-middlewares
 export function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
@@ -45,25 +51,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   const { payload = '', proxy = false } = req.query
-  const odpt = 'c202498aea9cd692709d37368b7b617ea30c147e5f6b2bc32d5a742aac85d717'
+  const odpt = 'f80c1d9fdcec82bf671b0a1c2c6e8412042d263686d9f4b6045032620b6defbf'
 
   const x = decryptPayload(payload as string)
-  const refer: string = req.headers['referer'] ?? ''
-  const allowedRefer: RegExp[] = [
-    /^https:\/\/beruanglaut\.com\//,
-    /^https:\/\/khaddavi\.net\//,
-    /^https:\/\/ayobelajarbareng\.com\//,
-    /^https:\/\/www.jrtekno\.com\//,
-    /^https:\/\/semawur\.com\//,
-    /^https:\/\/realsht\.mobi\//,
-    /^https:\/\/go.bicolink\.net\//,
-	/^https:\/\/en.shrinke\.me\//,
-    /^https:\/\/contentmenarik\.com\//,
-    /^https:\/\/carapedi\.id\//,
-    /^https:\/\/ouo\..*\//,
-    /^https:\/\/karyawan\.co\.id\//,
-  ];
-
+  
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
     res.status(400).json({ error: 'No path specified.' })
@@ -92,13 +83,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!allowedRefer.some(regex => regex.test(refer)) || refer === "") {
-    res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
-    return
-  }else if(x == ""){
-    res.status(400).json({ error: 'Invalid Payload' })
-    return
-  } else {
     await runCorsMiddleware(req, res)
     try {
       // Handle response from OneDrive API
@@ -132,5 +116,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(error?.response?.status ?? 500).json({ error: error?.response?.data ?? 'Internal server error.' })
       return
     }
-  }
 }
