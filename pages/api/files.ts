@@ -36,7 +36,6 @@ export function runCorsMiddleware(req: NextApiRequest, res: NextApiResponse) {
   })
 }
 
-
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const accessToken = await getAccessToken()
   if (!accessToken) {
@@ -48,21 +47,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const odpt = 'c202498aea9cd692709d37368b7b617ea30c147e5f6b2bc32d5a742aac85d717'
 
   const x = decryptPayload(payload as string)
-  const refer: string = req.headers['referer'] ?? ''
-  const allowedRefer: RegExp[] = [
-    /^https:\/\/beruanglaut\.com\//,
-    /^https:\/\/khaddavi\.net\//,
-    /^https:\/\/ayobelajarbareng\.com\//,
-    /^https:\/\/www.jrtekno\.com\//,
-    /^https:\/\/semawur\.com\//,
-    /^https:\/\/realsht\.mobi\//,
-    /^https:\/\/go.bicolink\.net\//,
-	/^https:\/\/en.shrinke\.me\//,
-    /^https:\/\/contentmenarik\.com\//,
-    /^https:\/\/carapedi\.id\//,
-    /^https:\/\/ouo\..*\//,
-    /^https:\/\/karyawan\.co\.id\//,
-  ];
 
   // Sometimes the path parameter is defaulted to '[...path]' which we need to handle
   if (payload === '[...path]') {
@@ -92,13 +76,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   //Referer check and empty payload handling
-  if (!allowedRefer.some(regex => regex.test(refer)) || refer === "") {
-    res.status(403).json({ error: 'Sepertinya anda bukan dari beruanglaut. Hanya download dari beruanglaut, bukan yang lain. Jika sudah, coba ganti browser yang anda gunakan.' })
-    return
-  }else if(x == ""){
-    res.status(400).json({ error: 'Invalid Payload' })
-    return
-  } else {
     await runCorsMiddleware(req, res)
     try {
       // Handle response from OneDrive API
@@ -132,5 +109,4 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       res.status(error?.response?.status ?? 500).json({ error: error?.response?.data ?? 'Internal server error.' })
       return
     }
-  }
 }
